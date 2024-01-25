@@ -1,35 +1,30 @@
 #include<iostream>
 using namespace std;
-int binary(int arr[],int key,int size){
-    int start,end,mid;
-    start=0;
-    end=size-1;
-    mid=(start+end)/2;
+int binary(int arr[],int size,int key){
+    int start=0;
+    int end=size-1;
+    int mid=start+(end-start)/2;
     while(start<=end){
-        if(arr[mid]==key){
-            cout<<mid<<"Found";
+        if(key==arr[mid]){
+            cout<<mid<<" Key found";
             break;
         }
-        else if(key>arr[mid]){
-            start=mid+1;
-        }
-        else if(key<arr[mid]){
+        else if (key<arr[mid])
+        {
             end=mid-1;
         }
-        mid=(start+end)/2;
+        else if (key>arr[mid])
+        {
+            start=mid+1;
+        }
+        mid=start+(end-start)/2;
     }
     return -1;
 }
 int main(){
-    int arr[10];
-    int size,key;
-    cout<<"Enter the size of array:";
-    cin>>size;
-    cout<<"Enter the elements in array:";
-    for(int i=0;i<size;i++){
-        cin>>arr[i];
-    }
+    int arr[5]={1,11,34,51,56},key;
+    int size=sizeof(arr)/sizeof(int);
     cout<<"Enter the key:";
     cin>>key;
-    binary(arr,key,size);
+    binary(arr,size,key);
 }
