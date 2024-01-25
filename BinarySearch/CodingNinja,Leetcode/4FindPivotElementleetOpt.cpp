@@ -16,7 +16,7 @@ int pivot(int arr[],int size){
     return start;
 }
 int main(){
-    int arr[7]={3,4,5,6,0,1,2};
+    int arr[5]={3,4,0,1,2};
     int size=sizeof(arr)/sizeof(int);
     cout<<"Pivot Index:"<<pivot(arr,size);
 }

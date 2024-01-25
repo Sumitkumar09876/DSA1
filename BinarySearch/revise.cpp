@@ -1,30 +1,23 @@
 #include<iostream>
 using namespace std;
-int binary(int arr[],int size,int key){
+int pivot(int arr[],int size){
     int start=0;
     int end=size-1;
     int mid=start+(end-start)/2;
     while(start<=end){
-        if(key==arr[mid]){
-            cout<<mid<<" Key found";
-            break;
-        }
-        else if (key<arr[mid])
-        {
-            end=mid-1;
-        }
-        else if (key>arr[mid])
-        {
+        if(arr[mid]>=arr[0]){
             start=mid+1;
+        }
+        else{
+            end=mid-1;
         }
         mid=start+(end-start)/2;
     }
-    return -1;
+    return start;
 }
 int main(){
-    int arr[5]={1,11,34,51,56},key;
+    int arr[5]={3,4,0,1,2};
     int size=sizeof(arr)/sizeof(int);
-    cout<<"Enter the key:";
-    cin>>key;
-    binary(arr,size,key);
+
+    cout<<"Pivot Index:"<<pivot(arr,size);
 }
