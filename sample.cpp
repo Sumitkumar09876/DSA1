@@ -1,38 +1,24 @@
-#include <bits/stdc++.h>
+#include<iostream>
 using namespace std;
-
-struct Item {
-    int value, weight;
-    Item(int value, int weight) : value(value), weight(weight) {}
-};
-
-bool cmp(struct Item a, struct Item b) {
-    double r1 = (double)a.value / a.weight;
-    double r2 = (double)b.value / b.weight;
-    return r1 > r2;
-}
-
-double fractionalKnapsack(struct Item arr[], int N, int size) {
-    sort(arr, arr + size, cmp);
-    int curWeight = 0;
-    double finalvalue = 0.0;
-    for (int i = 0; i < size; i++) {
-        if (curWeight + arr[i].weight <= N) {
-            curWeight += arr[i].weight;
-            finalvalue += arr[i].value;
-        } else {
-            int remain = N - curWeight;
-            finalvalue += arr[i].value * ((double)remain / arr[i].weight);
-            break;
+class Sorting{
+    public:
+    int i,j;
+    void bubblesort(int arr[],int size){ // change return type to void
+        for(i=0;i<size;i++){
+            for(j=0;j<size-i-1;j++){ // change loop condition to j<size-i-1
+                if(arr[j]>arr[j+1]){ // change condition to arr[j]>arr[j+1]
+                    swap(arr[j],arr[j+1]);
+                }
+            }
+        }
+        for(i=0;i<size;i++){
+            cout<<" "<<arr[i];
         }
     }
-    return finalvalue;
-}
-
-int main() {
-    int N = 60;
-    Item arr[] = {{100, 10}, {280, 40}, {120, 20}, {120, 24}};
-    int size = sizeof(arr) / sizeof(arr[0]);
-    cout << "Maximum profit earned = " << fractionalKnapsack(arr, N, size);
-    return 0;
+};
+int main(){
+    int arr[5]={45,2,54,33,54};
+    int size=sizeof(arr)/sizeof(int);
+    Sorting sort;
+    sort.bubblesort(arr,size);
 }
