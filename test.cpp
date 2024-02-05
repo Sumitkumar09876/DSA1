@@ -1,49 +1,42 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
-
 using namespace std;
 
-// Function to calculate the maximum value of items that can be added to the knapsack
-int knapSack(int W, vector<int> wt, vector<int> val, int n) {
-    vector<pair<double, int>> ratios;
-    for (int i = 0; i < n; i++) {
-        ratios.push_back({static_cast<double>(val[i]) / wt[i], i});
-    }
+class merger {
+public:
+    void mer(vector<int> &arr1, vector<int> &arr2) {
+        int size1 = arr1.size();
+        int size2 = arr2.size();
+        int total = size1 + size2;
+        vector<int> revarr;
 
-    sort(ratios.rbegin(), ratios.rend());
+        // Merge arr1 and arr2 into revarr
+        for (int i = 0; i < size1; i++) {
+            revarr.push_back(arr1[i]);
+        }
+        for (int i = 0; i < size2; i++) {
+            revarr.push_back(arr2[i]);
+        }
 
-    int totalValue = 0;
-    for (int i = 0; i < n; i++) {
-        int currentWeight = wt[ratios[i].second];
-        int currentValue = val[ratios[i].second];
+        // Sort revarr using bubble sort
+        for (int i = 0; i < total; i++) {
+            for (int j = i + 1; j < total; j++) {
+                if (revarr[i] > revarr[j]) {
+                    swap(revarr[i], revarr[j]);
+                }
+            }
+        }
 
-        if (W >= currentWeight) {
-            totalValue += currentValue;
-            W -= currentWeight;
-        } else {
-            totalValue += (W / currentWeight) * currentValue;
-            break;
+        // Print the sorted array
+        for (int i = 0; i < total; i++) {
+            cout << revarr[i] << " ";
         }
     }
-
-    return totalValue;
-}
+};
 
 int main() {
-    int n, W;
-    cout << "Enter the number of items: ";
-    cin >> n;
-    cout << "Enter the maximum weight: ";
-    cin >> W;
-
-    vector<int> wt(n), val(n);
-    cout << "Enter the weight and value of each item: ";
-    for (int i = 0; i < n; i++) {
-        cin >> wt[i] >> val[i];
-    }
-
-    cout << "The maximum value of items that can be added to the knapsack is: " << knapSack(W, wt, val, n) << endl;
-
-    return 0;
+    vector<int> arr1 = {1, 4, 5, 8, 11};
+    vector<int> arr2 = {2, 3, 6, 12};
+    merger me;
+    me.mer(arr1, arr2);
 }
