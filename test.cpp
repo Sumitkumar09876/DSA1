@@ -1,42 +1,36 @@
-#include <iostream>
-#include <vector>
+#include<iostream>
+#include<vector>
+#include<string>
 using namespace std;
 
-class merger {
+class comp {
 public:
-    void mer(vector<int> &arr1, vector<int> &arr2) {
-        int size1 = arr1.size();
-        int size2 = arr2.size();
-        int total = size1 + size2;
-        vector<int> revarr;
-
-        // Merge arr1 and arr2 into revarr
-        for (int i = 0; i < size1; i++) {
-            revarr.push_back(arr1[i]);
-        }
-        for (int i = 0; i < size2; i++) {
-            revarr.push_back(arr2[i]);
-        }
-
-        // Sort revarr using bubble sort
-        for (int i = 0; i < total; i++) {
-            for (int j = i + 1; j < total; j++) {
-                if (revarr[i] > revarr[j]) {
-                    swap(revarr[i], revarr[j]);
-                }
+    string compress(vector<char>& v) {
+        int i = 0;
+        string result;
+        int size = v.size();
+        while (i < size) {
+            int j = i + 1;
+            while (j < size && v[i] == v[j]) {
+                j++;
             }
+            result += v[i];
+            int count = j - i;
+            if (count > 1) {
+                result += ',' + to_string(count);
+            }
+            if (j < size) {
+                result += ',';
+            }
+            i = j;
         }
-
-        // Print the sorted array
-        for (int i = 0; i < total; i++) {
-            cout << revarr[i] << " ";
-        }
+        return result;
     }
 };
 
 int main() {
-    vector<int> arr1 = {1, 4, 5, 8, 11};
-    vector<int> arr2 = {2, 3, 6, 12};
-    merger me;
-    me.mer(arr1, arr2);
-}
+    vector<char>v = {'a','a','b','b','c','c','c'};
+    comp c;
+    cout << c.compress(v);
+    return 0;
+} 
