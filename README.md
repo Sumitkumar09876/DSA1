@@ -1,4 +1,2 @@
 # DSA
-
-hello world
-hi
+Zero to Hero Challenge 
