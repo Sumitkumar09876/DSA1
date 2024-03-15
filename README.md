@@ -1,10 +1,10 @@
 # Data Structures and Algorithms in C++
 
-This repository contains implementations of various Data Structures and Algorithms in C++, developed by Sumit Kumar.
+This repository contains implementations of various Data Structures and Algorithms in C++, along with Object-Oriented Programming (OOP) concepts, arrays, Standard Template Library (STL), strings, binary search, pointers, mathematics for DSA, and analysis of time and space complexity. These implementations are done by [Your Name].
 
 ## Overview
 
-Data Structures and Algorithms (DSA) form the backbone of computer science and are essential for writing efficient and scalable code. This repository aims to provide implementations of commonly used data structures and algorithms in C++ for educational and reference purposes.
+Data Structures and Algorithms (DSA) form the backbone of computer science and are essential for writing efficient and scalable code. This repository aims to provide implementations of commonly used data structures, algorithms, and related concepts in C++ for educational and reference purposes.
 
 ## Table of Contents
 
@@ -17,15 +17,22 @@ Data Structures and Algorithms (DSA) form the backbone of computer science and a
    - Heap
    - Hash Table
    - Graph
+   - Arrays
+   - Strings
+   - Pointers
+   - Object-Oriented Programming (OOP)
+   - Standard Template Library (STL)
 2. [Algorithms](#algorithms)
    - Sorting Algorithms
    - Searching Algorithms
    - Graph Algorithms
    - Dynamic Programming
-   - Recursion
-3. [Usage](#usage)
-4. [Contributing](#contributing)
-5. [License](#license)
+   - Mathematics for DSA
+   - Binary Search
+3. [Time and Space Complexity](#time-and-space-complexity)
+4. [Usage](#usage)
+5. [Contributing](#contributing)
+6. [License](#license)
 
 ## Data Structures
 
@@ -61,6 +68,26 @@ A hash table is a data structure that implements an associative array abstract d
 
 A graph is a non-linear data structure consisting of nodes (vertices) and edges. Graphs can be directed or undirected, and they can have weighted or unweighted edges.
 
+### Arrays
+
+Arrays are a collection of elements stored in contiguous memory locations. They provide fast access to elements using an index.
+
+### Strings
+
+Strings are sequences of characters. They are typically implemented as arrays of characters with a null terminator.
+
+### Pointers
+
+Pointers are variables that store memory addresses. They are widely used in C++ for dynamic memory allocation and manipulation of data structures.
+
+### Object-Oriented Programming (OOP)
+
+Object-Oriented Programming (OOP) is a programming paradigm based on the concept of "objects," which can contain data and code to manipulate that data. In C++, classes and objects are used to implement OOP principles such as encapsulation, inheritance, and polymorphism.
+
+### Standard Template Library (STL)
+
+The Standard Template Library (STL) is a collection of generic data structures and algorithms provided by the C++ standard library. It includes containers like vectors, lists, maps, and algorithms for sorting, searching, and manipulating these containers.
+
 ## Algorithms
 
 ### Sorting Algorithms
@@ -89,9 +116,17 @@ A graph is a non-linear data structure consisting of nodes (vertices) and edges.
 
 Dynamic programming is a method for solving complex problems by breaking them down into simpler subproblems and solving each subproblem only once.
 
-### Recursion
+### Mathematics for DSA
 
-Recursion is a programming technique where a function calls itself in order to solve smaller instances of the same problem.
+Mathematics for DSA includes concepts like prime numbers, modular arithmetic, number theory, and combinatorics, which are often used in designing and analyzing algorithms.
+
+### Binary Search
+
+Binary search is an efficient algorithm for finding a target value within a sorted array.
+
+## Time and Space Complexity
+
+Understanding the time and space complexity of algorithms is crucial for analyzing their efficiency and performance. This section discusses techniques for evaluating the time and space complexity of algorithms.
 
 ## Usage
 
