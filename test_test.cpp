@@ -1,35 +1,26 @@
 #include<iostream>
+#include<vector>
 using namespace std;
 
-class human{
-    private:
-    int weight;
-    int height;
-    int age;
-
-    public:
-    int getweight(){
-        return weight;
+class Solution {
+public:
+    int getCommon(vector<int>& nums1, vector<int>& nums2) {
+        int store;
+       for(int i=0;i<sizeof(nums1);i++){
+           for(int j=0;j<sizeof(nums2);j++){
+               if(nums1[i]==nums2[j]){
+                   store=nums1[i];
+                   return store;
+               }
+           }
+       } 
+       return -1;
     }
-    void setweight(int value){
-        weight = value;
-    }
-    // Add similar getter and setter methods for height and age if needed
-};
-
-class man:public human{
-    private:
-    int color;
-
-    public:
-    void sleep(){
-        cout<<"My weight is:"<<getweight();
-    }
-    // Add a getter and setter for color if needed
 };
 
 int main(){
-    man m;
-    m.setweight(45);
-    cout<<m.getweight();
+    vector<int>nums1={1,2,3};
+    vector<int>nums2={2,4};
+    Solution so;
+    cout<<so.getCommon(nums1,nums2);
 }
