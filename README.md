@@ -1,6 +1,6 @@
 # Data Structures and Algorithms in C++
 
-This repository contains implementations of various Data Structures and Algorithms in C++, along with Object-Oriented Programming (OOP) concepts, arrays, Standard Template Library (STL), strings, binary search, pointers, mathematics for DSA, and analysis of time and space complexity. These implementations are done by [Your Name].
+This repository contains implementations of various Data Structures and Algorithms in C++, along with Object-Oriented Programming (OOP) concepts, arrays, Standard Template Library (STL), strings, binary search, pointers, mathematics for DSA, and analysis of time and space complexity. These implementations are done by Sumit Kumar for my learning.
 
 ## Overview
 
