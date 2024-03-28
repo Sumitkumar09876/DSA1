@@ -12,8 +12,7 @@ class Node{
         int val=data;
         if(this->data != NULL){
             delete next;
-            this->next=NULL;
-              
+            this->next=NULL; 
         }
         cout<<"Value deleted:"<<val<<endl;
     }
