@@ -9,6 +9,7 @@ class Node{
         this->next=NULL;
     }
 };
+
 void InsertAthead(Node* &head,int d){
     Node* temp=new Node(d);
     temp->next=head;
