@@ -56,9 +56,6 @@ void Deletion(Node* &head,Node* &tail,int position){
         temp->next = NULL;
         delete temp;
     }
-
-
-    
     else{
         int cnt=1;
         Node* prev=NULL;
