@@ -71,8 +71,7 @@ void Deletion(Node* &head,Node* &tail,int position){
         if(prev->next==NULL){
             tail=prev;
         }
-    }
-    
+    } 
 }
 void print(Node*head){
     Node* temp=head;
@@ -92,7 +91,7 @@ int main(){
     
     InsertAtTail(tail,14);
     print(head);
-    InsertAtMiddle(head,tail,1,13);
+    InsertAtMiddle(head,tail,2,13);
     print(head);
     Deletion(head,tail,4);
     cout<<endl;
