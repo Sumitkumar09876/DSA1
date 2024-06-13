@@ -11,7 +11,7 @@ class Node{
     }
     ~Node(){
         int store=data;
-        if(data!=NULL){
+        if(this->data!=NULL){
             delete next;
             this->next=NULL;
         }
@@ -35,6 +35,25 @@ void insertNode(Node* &tail,int element,int data){
         curr->next=temp;
     }
 }
+void deleteNode(Node* &tail,int element){
+    if(tail==NULL){
+        cout<<"List is empty!";
+    }
+int cnt=1;
+Node* prev=NULL;
+Node* curr=tail;
+while (curr->data != element)
+{
+    prev=curr;
+    curr=curr->next;
+}
+prev->next=curr->next;
+if(curr==tail){
+    tail=prev;
+}
+curr->next=NULL;
+delete curr;
+}
 void print(Node* &tail){
     Node* temp=tail;
     do{
@@ -52,5 +71,8 @@ int main(){
     insertNode(tail,10,8);
     print(tail);
     insertNode(tail,9,7);
+    print(tail);
+    deleteNode(tail,10);
+    cout<<endl;
     print(tail);
 }

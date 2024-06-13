@@ -72,6 +72,6 @@ int main(){
     print(tail);
     InsertInNode(tail,12,10);
     print(tail);
-    DeleteNode(tail,11);
+    DeleteNode(tail,12);
     print(tail);
 }
