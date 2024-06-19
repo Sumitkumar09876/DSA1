@@ -42,8 +42,7 @@ void print(Node* &head){
     if(head==NULL || head->next==NULL){
         cout<<head->data;
     }
-    while (temp != NULL)
-    {
+    while(temp!=NULL){
         cout<<temp->data<<" ";
         temp=temp->next;
     }
