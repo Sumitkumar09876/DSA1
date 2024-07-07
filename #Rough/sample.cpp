@@ -10,13 +10,11 @@ class Node{
         this->next=NULL;
     }
 };
-
 void insertAtHead(Node* &head,int data){
     Node* temp=new Node(data);
     temp->next=head;
     head=temp;
 }
-
 void insertAtTail(Node* &tail,int data){
     Node* temp=new Node(data);
     tail->next=temp;
