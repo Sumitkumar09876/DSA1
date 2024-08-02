@@ -45,14 +45,13 @@ void InsertAtMiddle(Node* &head,Node* &tail,int position,int d){
     }
     Node* insertinto=new Node(d);
     insertinto->next=temp->next;
-    temp->next=insertinto;
+    temp->next=insertinto; 
     }
-    
 }
 void Deletion(Node* &head,Node* &tail,int position){
     if(position==1){
         Node* temp=head;
-        head=head->next;
+        head=head->next; 
         temp->next = NULL;
         delete temp;
     }
