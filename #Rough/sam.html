@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Game</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(8, 60px);
+            grid-template-rows: repeat(8, 60px);
+            gap: 0;
+            border: 2px solid #333;
+        }
+        .cell {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .cell:nth-child(odd) {
+            background-color: #769656;
+        }
+        .cell:nth-child(even) {
+            background-color: #eeeed2;
+        }
+        .cell[data-row="1"], .cell[data-row="3"], .cell[data-row="5"], .cell[data-row="7"] {
+            background-color: #eeeed2;
+        }
+        .cell[data-row="2"], .cell[data-row="4"], .cell[data-row="6"], .cell[data-row="8"] {
+            background-color: #769656;
+        }
+    </style>
+</head>
+<body>
+    <div class="board" id="board"></div>
+    <script>
+        const boardElement = document.getElementById('board');
+        const initialBoard = [
+            ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
+            ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+            [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+            ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+            ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']
+        ];
+
+        let selectedCell = null;
+
+        function createBoard() {
+            for (let row = 0; row < 8; row++) {
+                for (let col = 0; col < 8; col++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    cell.dataset.row = row;
+                    cell.dataset.col = col;
+                    cell.textContent = initialBoard[row][col];
+                    cell.addEventListener('click', () => onCellClick(cell));
+                    boardElement.appendChild(cell);
+                }
+            }
+        }
+
+        function onCellClick(cell) {
+            if (selectedCell) {
+                movePiece(selectedCell, cell);
+                selectedCell = null;
+            } else {
+                selectedCell = cell;
+            }
+        }
+
+        function movePiece(fromCell, toCell) {
+            const fromRow = fromCell.dataset.row;
+            const fromCol = fromCell.dataset.col;
+            const toRow = toCell.dataset.row;
+            const toCol = toCell.dataset.col;
+
+            // Basic move validation (to be expanded)
+            if (initialBoard[toRow][toCol] === ' ') {
+                initialBoard[toRow][toCol] = initialBoard[fromRow][fromCol];
+                initialBoard[fromRow][fromCol] = ' ';
+                fromCell.textContent = ' ';
+                toCell.textContent = initialBoard[toRow][toCol];
+            }
+        }
+
+        createBoard();
+    </script>
+</body>
+</html>
