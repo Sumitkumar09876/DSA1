@@ -1,4 +1,5 @@
-/*Given an Integer, we need to fing the sum of values of that table
+/*29 April S1 Q1
+Given an Integer, we need to fing the sum of values of that table
 Input 10   output 550;
 Ex:10*1+10*2...10*10=550;
 */

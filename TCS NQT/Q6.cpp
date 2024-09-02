@@ -1,4 +1,4 @@
-/*
+/*29 April S1 Q2
 Given an array & a integer K we need to find the max element in each of the contiguous subarrary
 Input 2,4,7,1,6,3  k=3
 Output 7776

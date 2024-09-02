@@ -1,19 +1,25 @@
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
-
-int fib(int n) {
-    if (n <= 1)
-        return n;
-    return fib(n - 1) + fib(n - 2);
-}
-
-int main() {
-    int n;
-    cout << "Enter the number of terms: ";
-    cin >> n;
-    cout << "Fibonacci Series: ";
-    for (int i = 0; i < n; i++) {
-        cout << fib(i) << " ";
+class Solution
+{
+public:
+    int subarrayBitwiseORs(vector<int> A)
+    {
+        unordered_set<int> res, cur, cur2;
+        for (int i : A)
+        {
+            cur2 = {i};
+            for (int j : cur)
+                cur2.insert(i | j);
+            for (int j : cur = cur2)
+                res.insert(j);
+        }
+        return res.size();
     }
-    return 0;
+};
+int main()
+{
+    Solution sl;
+    vector<int> arr = {1, 1, 2};
+    cout << sl.subarrayBitwiseORs(arr);
 }

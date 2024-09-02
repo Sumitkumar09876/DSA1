@@ -1,4 +1,5 @@
-/*calculate the sum of N terms of Fibonacci series
+/*29 April S2 Q2
+calculate the sum of N terms of Fibonacci series
 Note; fib(0)=1
       fib(1)=1
 Input  n=5
