@@ -23,7 +23,7 @@ class Solution{
     }
 };
 int main(){
-    vector<int>arr={2,3,7,1,6,3,9};
+    vector<int>arr={2,3,7,1,6,3};
     Solution sl;
     vector<int>result=sl.solv(arr,3);
     for(int val:result){

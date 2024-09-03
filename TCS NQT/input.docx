@@ -1,0 +1,157 @@
+Certainly! The provided code demonstrates different ways to handle user input for a vector of integers in C++. Each function provides a different method to read and parse an array of integers from the standard input (stdin).
+
+Here's a detailed explanation of each part of the code:
+
+### Libraries and Namespace
+```cpp
+#include <iostream>
+#include <vector>
+#include <sstream>
+using namespace std;
+```
+- `iostream` is included for standard input and output.
+- `vector` is included to use the `std::vector` container.
+- `sstream` is included for stream operations that allow parsing strings.
+- `using namespace std` is used to avoid prefixing standard library identifiers with `std::`.
+
+### Function Definitions
+
+#### 1. `input_array_format`
+```cpp
+vector<int> input_array_format() {
+    vector<int> arr;
+    string input;
+    getline(cin, input);
+    stringstream ss(input);
+    char c;
+    while (ss >> c) {
+        if (c != ',' || c != '[' or c != ']') {
+            int num;
+            ss >> num;
+            arr.push_back(num);
+        }
+    }
+    return arr;
+}
+```
+- **Purpose**: This function reads an input string formatted as `[1,2,3,4,5]`.
+- **Steps**:
+  1. Reads a line of input into a string `input`.
+  2. Initializes a string stream `ss` with the input string.
+  3. Uses a loop to process each character.
+  4. Ignores commas, opening brackets `[`, and closing brackets `]`; reads integers and adds them to the vector `arr`.
+
+#### 2. `input_space_separated`
+```cpp
+vector<int> input_space_separated() {
+    vector<int> arr;
+    string input;
+    getline(cin, input);
+    stringstream ss(input);
+    int num;
+    while (ss >> num) {
+        arr.push_back(num);
+    }
+    return arr;
+}
+```
+- **Purpose**: This function reads space-separated integers, like `1 2 3 4 5`.
+- **Steps**:
+  1. Reads a line of input into a string `input`.
+  2. Initializes a string stream `ss` with the input string.
+  3. Uses a loop to read integers separated by spaces and adds them to the vector `arr`.
+
+#### 3. `input_comma_separated`
+```cpp
+vector<int> input_comma_separated() {
+    vector<int> arr;
+    string input;
+    getline(cin, input);
+    stringstream ss(input);
+    int num;
+    char c;
+    while (ss >> num) {
+        arr.push_back(num);
+        ss >> c;  // Skip the comma
+    }
+    return arr;
+}
+```
+- **Purpose**: This function reads comma-separated integers, like `1,2,3,4,5`.
+- **Steps**:
+  1. Reads a line of input into a string `input`.
+  2. Initializes a string stream `ss` with the input string.
+  3. Uses a loop to read integers separated by commas and adds them to the vector `arr`.
+  4. The comma between numbers is skipped by reading it into the character `c`.
+
+#### 4. `input_array_size_not_given`
+```cpp
+vector<int> input_array_size_not_given() {
+    vector<int> arr;
+    string input;
+    getline(cin, input);
+    stringstream ss(input);
+    int num;
+    while (ss >> num) {
+        arr.push_back(num);
+    }
+    return arr;
+}
+```
+- **Purpose**: This function reads integers without specifying the size or format, similar to `input_space_separated`.
+- **Steps**:
+  1. Reads a line of input into a string `input`.
+  2. Initializes a string stream `ss` with the input string.
+  3. Uses a loop to read integers separated by spaces and adds them to the vector `arr`.
+
+### `main` Function
+```cpp
+int main() {
+    // Case 1: [1,2,3,4,5]
+    vector<int> arr1 = input_array_format();
+    cout << "Case 1: [1,2,3,4,5]" << endl;
+    for (int num : arr1) {
+        cout << num << " ";
+    }
+    cout << endl;
+
+    // Case 2: 1 2 3 4 5
+    vector<int> arr2 = input_space_separated();
+    cout << "Case 2: 1 2 3 4 5" << endl;
+    for (int num : arr2) {
+        cout << num << " ";
+    }
+    cout << endl;
+
+    // Case 3: 1,2,3,4,5
+    vector<int> arr3 = input_comma_separated();
+    cout << "Case 3: 1,2,3,4,5" << endl;
+    for (int num : arr3) {
+        cout << num << " ";
+    }
+    cout << endl;
+
+    // Case with size not given
+    vector<int> arr4 = input_array_size_not_given();
+    cout << "Case with size not given" << endl;
+    for (int num : arr4) {
+        cout << num << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
+```
+- **Purpose**: The `main` function demonstrates how to use each of the input functions by reading user input in different formats and displaying the results.
+- **Steps**:
+  1. Uses each of the above-defined functions to read different input formats.
+  2. Prints the parsed integers to verify correctness.
+
+### Summary
+This code is designed to handle various input formats for arrays of integers in C++:
+1. Array format with brackets and commas.
+2. Space-separated integers.
+3. Comma-separated integers.
+4. Generic space-separated integers without format specification.
+
+For each case, the program reads input from the user, parses it into a `vector<int>`, and then prints the elements to verify that the input was correctly handled.

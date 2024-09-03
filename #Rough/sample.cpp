@@ -3,20 +3,22 @@ using namespace std;
 class Solution
 {
 public:
-    int subarrayBitwiseORs(vector<int> A)
-    {
-        unordered_set<int> res, cur, cur2;
-        for (int i : A)
-        {
-            cur2 = {i};
-            for (int j : cur)
-                cur2.insert(i | j);
-            for (int j : cur = cur2)
-                res.insert(j);
+    vector<int>Solution(){
+        vector<int>arr;
+        string input;
+        stringstream ss(input);
+        char c;
+        for(ss>>c){
+            if(c!=',' || c!='[' || c!=']'){
+                int num;
+                ss>>num;
+                arr.push_back(num);
+            }
+
         }
-        return res.size();
+        return arr;
     }
-};
+}
 int main()
 {
     Solution sl;
