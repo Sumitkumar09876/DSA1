@@ -10,26 +10,32 @@ using namespace std;
 class Solution{
     public:
     int solv(int arr[],int size){
-        int sum=1;
-        int count=0;
+        if(size==0){
+            return 0;
+        }
+        int maxProduct=1;
+        int negcount=0;
+        int maxnegcount=INT_MIN;
+        bool hashZero=false;
         for(int i=0;i<size;i++){
-            if(arr[i]>0){
-                sum = sum*arr[i];
+            if(arr[i]==0){
+                hashZero=true;
+                continue;
             }
             if(arr[i]<0){
-                count++;
-                cout<<count<<" ";
-                if(count%2==1){
-                    int sum=1;
-                }
-                
+                negcount++;
+                maxnegcount=max(maxnegcount,arr[i]);
             }
-            if(count%2==0){
-                sum=sum*arr[i];
-                
-            }
+            maxProduct *= arr[i];
         }
-        return sum;
+        
+        if(negcount%2 != 0){
+            maxProduct /= maxnegcount;
+        }
+        if(maxProduct<0 && hashZero){
+            return 0;
+        }
+        return maxProduct;
     }
 };
 int main(){
