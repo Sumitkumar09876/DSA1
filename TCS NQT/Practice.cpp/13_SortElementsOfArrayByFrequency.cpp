@@ -24,10 +24,10 @@ class Solution{
             }
             return a.second>b.second;
         });
-
+/*afsoasfdjadfs;jfla*/
         for(const auto it:elements){
             for(int i=0;i<it.second;i++){
-                cout<<it.first<<" "<<endl;
+                cout<<it.first<<" ";
             }
         }
     }
