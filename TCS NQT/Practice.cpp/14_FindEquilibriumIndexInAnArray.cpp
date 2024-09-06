@@ -18,7 +18,26 @@ Explanation: There is no equilibrium index in the array.
 using namespace std;
 class Solution{
     public:
-    int solv(vector<int>arr,int size){
-        
+    int solv(int arr[], int size) {
+        int totalsum=0;
+        for(int i=0;i<size;i++){
+            totalsum += arr[i];
+        }
+        int leftsum=0;
+        for(int i=0;i<size;i++){
+            totalsum -=arr[i];
+            if(totalsum==leftsum){
+                return i+1;
+            }
+            leftsum += arr[i];
+        }
+        return -1;
     }
+};
+int main(){
+int arr[]={-7, 1, 5, 2, -4, 3, 0};
+int size=sizeof(arr)/sizeof(int);
+Solution sl;
+cout<<sl.solv(arr,size);
 }
+
