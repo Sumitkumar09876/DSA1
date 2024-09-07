@@ -1,19 +1,33 @@
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 
-int fib(int n) {
-    if (n <= 1)
-        return n;
-    return fib(n - 1) + fib(n - 2);
-}
+class Solution {
+public:
+    void solv(string str) {
+        int vowels = 0;
+        int consonants = 0;
+        int spaces = 0;
+        
+        for (int i = 0; i < str.length(); i++) {
+            if (str[i] == 'a' || str[i] == 'e' || str[i] == 'i' || str[i] == 'o' || str[i] == 'u' ||
+                str[i] == 'A' || str[i] == 'E' || str[i] == 'I' || str[i] == 'O' || str[i] == 'U') {
+                vowels++;
+            } else if (str[i] == ' ') {
+                spaces++;
+            } else if (isalpha(str[i])) {
+                consonants++;
+            }
+        }
+        
+        cout << "Vowels: " << vowels << endl;
+        cout << "Consonants: " << consonants << endl;
+        cout << "White spaces: " << spaces << endl;
+    }
+};
 
 int main() {
-    int n;
-    cout << "Enter the number of terms: ";
-    cin >> 6;
-    cout << "Fibonacci Series: ";
-    for (int i = 0; i < n; i++) {
-        cout << fib(i) << " ";
-    }
+    Solution solution;
+    string str = "Take u forward is Awesome";
+    solution.solv(str);
     return 0;
 }
