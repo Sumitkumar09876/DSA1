@@ -93,5 +93,7 @@
         "valarray": "cpp",
         "variant": "cpp"
     },
-    "livePreview.defaultPreviewPath": "/#Rough/sam.html"
+    "livePreview.defaultPreviewPath": "/#Rough/sam.html",
+    "CodeGPT.apiKey": "Nvidia",
+    "CodeGPT.Autocomplete.enabled": true
 }
