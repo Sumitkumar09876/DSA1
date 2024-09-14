@@ -9,7 +9,22 @@ output: "TakE U ForwarD IS AwesomE"
 using namespace std;
 class Solution{
     public:
-    int solv(string str){
-        
+    string solv(string str){
+        string store;
+        for(int i=0;i<str.length();i++){
+            if(i==0 || str[i-1]==' '){
+                store.push_back(str[i]-32);
+            }else if(i==str.length()-1 || str[i+1]==' '){
+                store.push_back(str[i]-32);
+            }else{
+                store.push_back(str[i]);
+            }
+        }
+        return store;
     }
+};
+int main(){
+    string str="take u forward is awesome";
+    Solution sl;
+    cout<<sl.solv(str);
 }

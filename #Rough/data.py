@@ -1,49 +1,45 @@
-import unittest
-import pandas as pd
-import os
+def main():
+    # Input for route A
+    m = int(input("Enter number of stops for Route A: "))
+    routeA = []
+    print("Enter stops for Route A:")
+    for _ in range(m):
+        routeA.append(int(input()))
 
-class TestMedicinesDataset(unittest.TestCase):
+    # Input for route B
+    n = int(input("Enter number of stops for Route B: "))
+    routeB = []
+    print("Enter stops for Route B:")
+    for _ in range(n):
+        routeB.append(int(input()))
 
-    def test_data_creation(self):
-        data = {
-            "Serial Number": list(range(1, 16)),
-            "Medicine Name": ["Paracetamol", "Amoxicillin", "Metformin", "Amlodipine", "Atorvastatin", 
-                              "Ibuprofen", "Pantoprazole", "Cetirizine", "Azithromycin", "Metformin+Glimepiride", 
-                              "Aspirin", "Montelukast", "Alprazolam", "Levothyroxine", "Telmisartan"],
-            "Disease Treated": ["Fever, Pain Relief", "Bacterial Infections", "Type 2 Diabetes", 
-                                "Hypertension", "High Cholesterol", "Pain Relief, Inflammation", 
-                                "Acid Reflux, GERD", "Allergies", "Bacterial Infections", "Diabetes", 
-                                "Blood Thinning", "Asthma, Allergies", "Anxiety, Panic Disorders", 
-                                "Hypothyroidism", "Hypertension"],
-            "Price (per unit) (INR)": [2.00, 10.00, 3.50, 5.00, 8.00, 2.50, 7.00, 3.00, 20.00, 6.00, 
-                                       1.50, 12.00, 5.00, 3.00, 8.50],
-            "Recommended Doses Per Day": ["1-3", "3 (every 8 hours)", "1-3", "1", "1", "1-3", "1", "1", 
-                                            "1", "1-2", "1", "1", "1-3 (as prescribed)", "1", "1"]
-        }
-        df = pd.DataFrame(data)
-        self.assertEqual(len(df), 15)
-        self.assertEqual(len(df.columns), 5)
+    # Read the specific stops to check
+    x = int(input("Enter stop x: "))
+    y = int(input("Enter stop y: "))
 
-    def test_excel_file_creation(self):
-        excel_file_path = "medicines_dataset.xlsx"
-        df = pd.DataFrame({
-            "Serial Number": list(range(1, 16)),
-            "Medicine Name": ["Paracetamol", "Amoxicillin", "Metformin", "Amlodipine", "Atorvastatin", 
-                              "Ibuprofen", "Pantoprazole", "Cetirizine", "Azithromycin", "Metformin+Glimepiride", 
-                              "Aspirin", "Montelukast", "Alprazolam", "Levothyroxine", "Telmisartan"],
-            "Disease Treated": ["Fever, Pain Relief", "Bacterial Infections", "Type 2 Diabetes", 
-                                "Hypertension", "High Cholesterol", "Pain Relief, Inflammation", 
-                                "Acid Reflux, GERD", "Allergies", "Bacterial Infections", "Diabetes", 
-                                "Blood Thinning", "Asthma, Allergies", "Anxiety, Panic Disorders", 
-                                "Hypothyroidism", "Hypertension"],
-            "Price (per unit) (INR)": [2.00, 10.00, 3.50, 5.00, 8.00, 2.50, 7.00, 3.00, 20.00, 6.00, 
-                                       1.50, 12.00, 5.00, 3.00, 8.50],
-            "Recommended Doses Per Day": ["1-3", "3 (every 8 hours)", "1-3", "1", "1", "1-3", "1", "1", 
-                                            "1", "1-2", "1", "1", "1-3 (as prescribed)", "1", "1"]
-        })
-        df.to_excel(excel_file_path, index=False, engine='openpyxl')
-        self.assertTrue(os.path.exists(excel_file_path))
-        os.remove(excel_file_path)
+    # Create sets for quick lookup
+    stopsA = set(routeA)
+    stopsB = set(routeB)
 
-if __name__ == '__main__':
-    unittest.main()
+    # Check if both stops are in their respective routes
+    if x in stopsA and y in stopsA:
+        print("No")
+        return
+    if x in stopsB and y in stopsB:
+        print("No")
+        return
+
+    canTravel = False
+
+    # Check if travel is possible
+    if (x in stopsA and y in stopsB) or (x in stopsB and y in stopsA):
+        canTravel = True
+
+    # Output the result
+    if canTravel:
+        print("Yes")
+    else:
+        print("No")
+
+if __name__ == "__main__":
+    main()

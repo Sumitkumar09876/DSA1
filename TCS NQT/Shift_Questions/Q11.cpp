@@ -1,4 +1,4 @@
-/*3 May S1 Q2
+/*3 May S1 Q1
 The organization has data warehouse there will be given a three digit number check whether number is divisible by 9 or not ?
 
 Input 236           Output Number 236 is not divisible by 9
