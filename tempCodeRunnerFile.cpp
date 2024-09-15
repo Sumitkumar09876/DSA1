@@ -1,95 +1,45 @@
-#include <ncurses.h>
-#include <cstdlib>
-#include <ctime>
-#include <vector>
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <algorithm>
 
-enum Direction { UP, DOWN, LEFT, RIGHT };
+using namespace std;
 
-struct Point {
-    int x, y;
-};
-
-class SnakeGame {
-private:
-    int height, width;
-    Point food;
-    std::vector<Point> snake;
-    Direction dir;
-    bool gameOver;
-
-    void generateFood() {
-        food.x = rand() % (width - 2) + 1;
-        food.y = rand() % (height - 2) + 1;
+string decodeString(string S1) {
+    // Step 1: Count the repeating characters
+    unordered_map<char, int> char_count;
+    for (char c : S1) {
+        char_count[c]++;
     }
 
-    void move() {
-        Point newHead = snake.front();
-        switch (dir) {
-            case UP: newHead.y--; break;
-            case DOWN: newHead.y++; break;
-            case LEFT: newHead.x--; break;
-            case RIGHT: newHead.x++; break;
-        }
-        snake.insert(snake.begin(), newHead);
-
-        if (newHead.x == food.x && newHead.y == food.y) {
-            generateFood();
-        } else {
-            snake.pop_back();
-        }
-
-        if (newHead.x == 0 || newHead.x == width - 1 || 
-            newHead.y == 0 || newHead.y == height - 1) {
-            gameOver = true;
+    // Step 2: Find the maximum repeating character
+    char max_char = S1[0];
+    int max_count = char_count[max_char];
+    for (auto& pair : char_count) {
+        if (pair.second > max_count) {
+            max_char = pair.first;
+            max_count = pair.second;
         }
     }
 
-public:
-    SnakeGame(int h, int w) : height(h), width(w), gameOver(false) {
-        srand(time(0));
-        snake.push_back({width / 2, height / 2});
-        dir = RIGHT;
-        generateFood();
-    }
+    // Step 3: Reverse the string
+    string reversed_S1 = S1;
+    reverse(reversed_S1.begin(), reversed_S1.end());
 
-    void run() {
-        initscr();
-        cbreak();
-        noecho();
-        keypad(stdscr, TRUE);
-        timeout(100);
-        
-        while (!gameOver) {
-            clear();
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    if (i == 0 || i == height - 1 || j == 0 || j == width - 1) {
-                        mvaddch(i, j, '#');
-                    }
-                }
-            }
-            mvaddch(food.y, food.x, '*');
-            for (const auto& p : snake) {
-                mvaddch(p.y, p.x, 'O');
-            }
-            refresh();
+    // Step 4: Format the output
+    string result = reversed_S1 + to_string(max_count) + max_char;
 
-            int ch = getch();
-            switch (ch) {
-                case KEY_UP: if (dir != DOWN) dir = UP; break;
-                case KEY_DOWN: if (dir != UP) dir = DOWN; break;
-                case KEY_LEFT: if (dir != RIGHT) dir = LEFT; break;
-                case KEY_RIGHT: if (dir != LEFT) dir = RIGHT; break;
-                case 'q': gameOver = true; break;
-            }
-            move();
-        }
-        endwin();
-    }
-};
+    // Step 5: Return the result
+    return result;
+}
 
 int main() {
-    SnakeGame game(20, 40);
-    game.run();
+    // INPUT [uncomment & modify if required]
+    string S1;
+    cin >> S1;
+
+    // Solution [uncomment & modify if required]
+    cout << decodeString(S1);
+
     return 0;
 }

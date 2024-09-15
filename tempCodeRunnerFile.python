@@ -1,12 +1,15 @@
-def TokenNumbering(N, P, A, B):
-    from itertools import permutations
+from itertools import permutations
 
-    # Initialize the result to 0
-    result = 0.0
+def TokenNumbering(N, P, A, B):
+    # Initialize the result to -404
+    result = -404
 
     # Generate all permutations of the token indices
     indices = list(range(N))
     all_permutations = permutations(indices)
+
+    # Initialize the probability result to 0
+    probability_result = 0.0
 
     # Iterate over all permutations to calculate the probability
     for perm in all_permutations:
@@ -30,16 +33,22 @@ def TokenNumbering(N, P, A, B):
                 used_numbers.add(B[i])
 
         if valid_permutation:
-            result += prob
+            probability_result += prob
+
+    # Divide by the number of permutations to get the average probability
+    probability_result /= len(list(permutations(indices)))
+
+    # Update the result with the calculated probability
+    result = probability_result
 
     return result
 
-# Input reading
-N = int(input())
-P = list(map(int, input().split()))
-A = list(map(int, input().split()))
-B = list(map(int, input().split()))
+# Input data
+N = 2
+P = [50, 50]
+A = [1, 2]
+B = [2, 1]
 
 # Function call and output
 result = TokenNumbering(N, P, A, B)
-print(result)
+print(f"{result:.9f}")

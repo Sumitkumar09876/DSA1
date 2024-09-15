@@ -11,7 +11,16 @@ o/p:64
 using namespace std;
 class Solution{
     public:
-    int solv(int arr[],int size){
-        
+    int solv(vector<int>&arr){
+        int n=arr.size();
+        sort(arr.begin(),arr.end());
+        int case1=arr[n-1]*arr[n-2]*arr[n-3];
+        int case2=arr[0]*arr[1]*arr[n-1];
+        return max(case1,case2);
     }
+};
+int main(){
+    vector<int>arr={3, -2, -8, 4, 1};
+    Solution sl;
+    cout<<sl.solv(arr);
 }
