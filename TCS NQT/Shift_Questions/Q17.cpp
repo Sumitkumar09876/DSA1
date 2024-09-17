@@ -1,4 +1,5 @@
 /*
+6 May S2 Q1
 Given an array of size N-1 with integers in the range of [1,N],the task is to find the missing number from the first N integers.
 Ex1:
 Input:

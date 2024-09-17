@@ -1,45 +1,40 @@
-#include <iostream>
-#include <string>
-#include <unordered_map>
-#include <algorithm>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-string decodeString(string S1) {
-    // Step 1: Count the repeating characters
-    unordered_map<char, int> char_count;
-    for (char c : S1) {
-        char_count[c]++;
-    }
-
-    // Step 2: Find the maximum repeating character
-    char max_char = S1[0];
-    int max_count = char_count[max_char];
-    for (auto& pair : char_count) {
-        if (pair.second > max_count) {
-            max_char = pair.first;
-            max_count = pair.second;
+class Solution {
+public:
+    bool isPrime(int num) {
+        if (num <= 1) {
+            return false;
         }
+        for (int i = 2; i * i <= num; i++) {
+            if (num % i == 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    // Step 3: Reverse the string
-    string reversed_S1 = S1;
-    reverse(reversed_S1.begin(), reversed_S1.end());
-
-    // Step 4: Format the output
-    string result = reversed_S1 + to_string(max_count) + max_char;
-
-    // Step 5: Return the result
-    return result;
-}
+    void solv(int n, int m) {
+        for (int i = n; i <= m; i++) {
+            if (isPrime(i)) {
+                int sum = 0;
+                int num = i;
+                while (num > 0) {
+                    sum += num % 10;
+                    num /= 10;
+                }
+                if (isPrime(sum)) {
+                    cout << i << " ";
+                }
+            }
+        }
+        cout << endl;
+    }
+};
 
 int main() {
-    // INPUT [uncomment & modify if required]
-    string S1;
-    cin >> S1;
-
-    // Solution [uncomment & modify if required]
-    cout << decodeString(S1);
-
+    Solution sl;
+    sl.solv(10, 30); // Example test case
     return 0;
 }
