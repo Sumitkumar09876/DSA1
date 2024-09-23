@@ -3,38 +3,39 @@ using namespace std;
 
 class Solution {
 public:
-    bool isPrime(int num) {
-        if (num <= 1) {
-            return false;
+    vector<pair<string, int>> parseInput(string str) {
+        vector<pair<string, int>> candidates;
+        stringstream ss(str);
+        int score;
+        string name;
+        
+        while (ss >> score >> name) {
+            candidates.push_back({name, score});
         }
-        for (int i = 2; i * i <= num; i++) {
-            if (num % i == 0) {
-                return false;
-            }
-        }
-        return true;
+        
+        return candidates;
     }
 
-    void solv(int n, int m) {
-        for (int i = n; i <= m; i++) {
-            if (isPrime(i)) {
-                int sum = 0;
-                int num = i;
-                while (num > 0) {
-                    sum += num % 10;
-                    num /= 10;
-                }
-                if (isPrime(sum)) {
-                    cout << i << " ";
-                }
-            }
+    void printTopKCandidates(vector<pair<string, int>>& candidates, int k) {
+        // Sort candidates based on scores in descending order
+        sort(candidates.begin(), candidates.end(), [](const pair<string, int>& a, const pair<string, int>& b) {
+            return b.second < a.second;
+        });
+        
+        // Print top k candidates
+        for (int i = 0; i < k && i < candidates.size(); ++i) {
+            cout << candidates[i].first << ":" << candidates[i].second << endl;
         }
-        cout << endl;
     }
 };
 
 int main() {
+    string str = "90 john 85 Bob 100 Alice 110 Aditya";
+    int k = 3;
+    
     Solution sl;
-    sl.solv(10, 30); // Example test case
+    vector<pair<string, int>> candidates = sl.parseInput(str);
+    sl.printTopKCandidates(candidates, k);
+    
     return 0;
 }
