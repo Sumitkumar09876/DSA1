@@ -15,9 +15,8 @@ using namespace std;
 class Solution{
     public:
     string solv(string str){
-        vector<string>store;
         for(int i=0;i<str.length();i++){
-            store.push_back(str[i]);
+            string store=str[i];
             for(int j=i;j<str.length();j++){
              if(store==str[j]){
                 cout<<store<<' ';
