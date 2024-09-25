@@ -1,85 +1,172 @@
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
 
-class Solution {
+enum Color { RED, BLACK };
+
+struct Node {
+    int data;
+    Color color;
+    Node *left, *right, *parent;
+
+    Node(int data) {
+        this->data = data;
+        left = right = parent = nullptr;
+        color = RED; // New nodes are always red
+    }
+};
+
+class RedBlackTree {
+private:
+    Node *root;
+
+    void rotateLeft(Node *&pt) {
+        Node *pt_y = pt->right;
+        pt->right = pt_y->left;
+
+        if (pt->right != nullptr)
+            pt->right->parent = pt;
+
+        pt_y->parent = pt->parent;
+
+        if (pt->parent == nullptr)
+            root = pt_y;
+        else if (pt == pt->parent->left)
+            pt->parent->left = pt_y;
+        else
+            pt->parent->right = pt_y;
+
+        pt_y->left = pt;
+        pt->parent = pt_y;
+    }
+
+    void rotateRight(Node *&pt) {
+        Node *pt_y = pt->left;
+        pt->left = pt_y->right;
+
+        if (pt->left != nullptr)
+            pt->left->parent = pt;
+
+        pt_y->parent = pt->parent;
+
+        if (pt->parent == nullptr)
+            root = pt_y;
+        else if (pt == pt->parent->left)
+            pt->parent->left = pt_y;
+        else
+            pt->parent->right = pt_y;
+
+        pt_y->right = pt;
+        pt->parent = pt_y;
+    }
+
+    void fixViolation(Node *&pt) {
+        Node *parent_pt = nullptr;
+        Node *grandparent_pt = nullptr;
+
+        while ((pt != root) && (pt->color == RED) && (pt->parent->color == RED)) {
+            parent_pt = pt->parent;
+            grandparent_pt = pt->parent->parent;
+
+            // Case A: Parent of pt is left child of Grandparent pt
+            if (parent_pt == grandparent_pt->left) {
+                Node *uncle_pt = grandparent_pt->right;
+
+                // Case 1: The uncle of pt is also red, only recoloring required
+                if (uncle_pt != nullptr && uncle_pt->color == RED) {
+                    grandparent_pt->color = RED;
+                    parent_pt->color = BLACK;
+                    uncle_pt->color = BLACK;
+                    pt = grandparent_pt;
+                } else {
+                    // Case 2: pt is right child of its parent
+                    if (pt == parent_pt->right) {
+                        rotateLeft(parent_pt);
+                        pt = parent_pt;
+                        parent_pt = pt->parent;
+                    }
+
+                    // Case 3: pt is left child of its parent
+                    rotateRight(grandparent_pt);
+                    swap(parent_pt->color, grandparent_pt->color);
+                    pt = parent_pt;
+                }
+            } else { // Case B: Parent of pt is right child of Grandparent pt
+                Node *uncle_pt = grandparent_pt->left;
+
+                // Mirror Case 1: The uncle of pt is also red
+                if ((uncle_pt != nullptr) && (uncle_pt->color == RED)) {
+                    grandparent_pt->color = RED;
+                    parent_pt->color = BLACK;
+                    uncle_pt->color = BLACK;
+                    pt = grandparent_pt;
+                } else {
+                    // Mirror Case 2: pt is left child of its parent
+                    if (pt == parent_pt->left) {
+                        rotateRight(parent_pt);
+                        pt = parent_pt;
+                        parent_pt = pt->parent;
+                    }
+
+                    // Mirror Case 3: pt is right child of its parent
+                    rotateLeft(grandparent_pt);
+                    swap(parent_pt->color, grandparent_pt->color);
+                    pt = parent_pt;
+                }
+            }
+        }
+        root->color = BLACK;
+    }
+
 public:
-    vector<int> maxStudent(int n, int m, int q, vector<int> &arr, vector<int> &strength, vector<vector<int>> &transfers) {
-        vector<int> result;
-        unordered_map<int, set<int>> school_students;
-        unordered_map<int, int> school_oddness;
+    RedBlackTree() { root = nullptr; }
 
-        // Initialize the schools with their students and calculate initial oddness
-        for (int i = 0; i < n; i++) {
-            school_students[arr[i]].insert(strength[i]);
-        }
-        for (int i = 1; i <= m; i++) {
-            if (!school_students[i].empty()) {
-                school_oddness[i] = *school_students[i].begin();
-            } else {
-                school_oddness[i] = 0;
-            }
-        }
+    void insert(const int &data) {
+        Node *pt = new Node(data);
+        root = bstInsert(root, pt);
+        fixViolation(pt);
+    }
 
-        // Process each transfer
-        for (const auto &transfer : transfers) {
-            int student = transfer[0] - 1;
-            int new_school = transfer[1];
-            int old_school = arr[student];
-            int student_strength = strength[student];
+    Node* bstInsert(Node *root, Node *pt) {
+        if (root == nullptr)
+            return pt;
 
-            // Remove student from old school
-            school_students[old_school].erase(student_strength);
-            if (school_students[old_school].empty()) {
-                school_oddness[old_school] = 0;
-            } else {
-                school_oddness[old_school] = *school_students[old_school].begin();
-            }
-
-            // Add student to new school
-            school_students[new_school].insert(student_strength);
-            school_oddness[new_school] = *school_students[new_school].begin();
-
-            // Update student's school
-            arr[student] = new_school;
-
-            // Calculate the maximum oddness
-            int max_oddness = 0;
-            for (const auto &entry : school_oddness) {
-                max_oddness = max(max_oddness, entry.second);
-            }
-            result.push_back(max_oddness);
+        if (pt->data < root->data) {
+            root->left = bstInsert(root->left, pt);
+            root->left->parent = root;
+        } else if (pt->data > root->data) {
+            root->right = bstInsert(root->right, pt);
+            root->right->parent = root;
         }
 
-        return result;
+        return root;
+    }
+
+    void inorderHelper(Node *root) {
+        if (root == nullptr)
+            return;
+
+        inorderHelper(root->left);
+        cout << root->data << " (" << (root->color == RED ? "R" : "B") << ") ";
+        inorderHelper(root->right);
+    }
+
+    void inorder() {
+        inorderHelper(root);
     }
 };
 
 int main() {
-    int t;
-    cin >> t;
-    while (t--) {
-        int n, m, q;
-        cin >> n >> m >> q;
-        vector<int> arr(n), strength(n);
-        vector<vector<int>> transfers(q, vector<int>(2));
-        for (int i = 0; i < n; i++) {
-            cin >> arr[i];
-        }
-        for (int i = 0; i < n; i++) {
-            cin >> strength[i];
-        }
-        for (int i = 0; i < q; i++) {
-            cin >> transfers[i][0] >> transfers[i][1];
-        }
-        Solution ob;
-        vector<int> res = ob.maxStudent(n, m, q, arr, strength, transfers);
-        for (int i = 0; i < q; i++) {
-            if (i != q - 1) {
-                cout << res[i] << " ";
-            } else {
-                cout << res[i] << endl;
-            }
-        }
-    }
+    RedBlackTree tree;
+
+    tree.insert(10);
+    tree.insert(20);
+    tree.insert(15);
+    tree.insert(30);
+    tree.insert(25);
+
+    cout << "Inorder Traversal of Created Tree: ";
+    tree.inorder();
+    cout << endl;
+
     return 0;
 }

@@ -1,5 +1,5 @@
 /*
-14 May 2024 S1 Q1
+14 May 2024 S1 Q2
 Sum of Unique Elements
 You are given an integers array nums.The unique elements of an array are the elements that appear exactly once in the array.
 Return the sum of all the unique elements of nums.

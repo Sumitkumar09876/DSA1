@@ -95,5 +95,22 @@
     },
     "livePreview.defaultPreviewPath": "/#Rough/sam.html",
     "CodeGPT.apiKey": "Nvidia",
-    "CodeGPT.Autocomplete.enabled": true
+    "CodeGPT.Autocomplete.enabled": true,
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "xprotocol",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 33060,
+            "driver": "MySQL",
+            "name": "MySQL Local",
+            "database": "Mydata",
+            "username": "root",
+            "password": "1234",
+            "connectionTimeout": 30
+        }
+    ]
 }
