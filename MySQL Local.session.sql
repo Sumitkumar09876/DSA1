@@ -21,4 +21,4 @@ Insert Into Employ(EmpID)Values
 (2),
 (3);
 
-Select * from employ;
+Select * from books;
