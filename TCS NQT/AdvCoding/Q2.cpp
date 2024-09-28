@@ -34,3 +34,27 @@ The candidate has to write the code to accept 2 inputs.
 First Input: It will contain two integers N (number of horses) and K (reward money)
 Second Input: It will contain N integers, each separated
 */
+#include<bits/stdc++.h>
+using namespace std;
+class Solution{
+    public:
+    int solv(vector<int>arr,int n,int k){
+        int count=0;
+        vector<int>store;
+        for(int i=0;i<arr.size();i++){
+            int sum=0;
+            for(int j=i;j<arr.size();j++){
+                sum+=arr[j];
+                if(sum<k){
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+};
+int main(){
+    vector<int>arr={30, 40, 50, 20, 20, 10, 90, 10, 10, 10 };
+    Solution sl;
+    cout<<sl.solv(arr,10,100);
+}
