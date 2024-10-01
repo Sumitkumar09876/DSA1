@@ -35,7 +35,7 @@ class Solution{
     }
 };
 int main(){
-int arr[]={-7, 1, 5, 2, -4, 3, 0};
+int arr[]={1,2,3};
 int size=sizeof(arr)/sizeof(int);
 Solution sl;
 cout<<sl.solv(arr,size);
