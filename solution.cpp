@@ -1,39 +1,34 @@
-#include <iostream>
-#include <vector>
-
+/*
+Search an element in an array and return its positon
+Ex 1:
+Input arr[]={1,2,3,4,5} k=3
+Output 2
+*/
+#include<iostream>
+#include<sstream>
+#include<vector>
+#include<string>
 using namespace std;
-
-class Solution {
-public:
-    vector<int> solve(vector<int>& arr) {
-        int size = arr.size();
-        
-        for (int i = 0; i < size - 1; i++) {
-            for (int j = 0; j < size - 1 - i; j++) {
-                if (arr[j] > arr[j + 1]) {
-                    // Swap elements
-                    int hold = arr[j];
-                    arr[j] = arr[j + 1];
-                    arr[j + 1] = hold;
-                }
+class Solution{
+    public:
+    int solv(vector<int>arr,int size,int k){
+        for(int i=0;i<size;i++){
+            if(arr[i]==k){
+                return i;
             }
         }
-        
-        return arr;
     }
 };
-
-int main() {
-    vector<int> arr = {4, 13, 2, 3};
-    Solution sl;
-    
-    vector<int> result = sl.solve(arr);
-    
-    for (const auto& it : result) {
-        cout << it << " ";
+int main(){
+    string str="1,2,3,4,5";
+    vector<int>store;
+    //string trimedin=str.substr(1,str.size()-2);
+    stringstream ss(str);
+    string item;
+    while(getline(ss, item, ',')){
+        store.push_back(stoi(item));
     }
-    
-    cout << endl;
-    
-    return 0;
+    int size=store.size();
+    Solution sl;
+    cout<<sl.solv(store,size,3);
 }
