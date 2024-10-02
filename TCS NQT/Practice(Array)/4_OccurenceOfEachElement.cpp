@@ -5,7 +5,9 @@ Ouput 10 3
 5 2
 15 1
 */
-#include<bits/stdc++.h>
+#include<iostream>
+#include<vector>
+#include<unordered_map>
 using namespace std;
 class solution{
     public:
