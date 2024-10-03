@@ -19,9 +19,9 @@ class Solution{
             elements.push_back(it);
         }
         sort(elements.begin(),elements.end(),[](const pair<int,int>&a,pair<int,int>&b){
-            if(a.second==b.second){
-                return a.first<b.first;
-            }
+            //if(a.second==b.second){
+            //    return a.first>b.first;
+            //}
             return a.second>b.second;
         });
         for(const auto it:elements){

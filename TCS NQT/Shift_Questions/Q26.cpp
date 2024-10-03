@@ -14,15 +14,29 @@ watermelon orange lemon banana apple
 using namespace std;
 class Solution{
     public:
-    string solv(string str){
-        for(int i=0;i<str.length();i++){
-            string store=str[i];
-            for(int j=i;j<str.length();j++){
-             if(store==str[j]){
-                cout<<store<<' ';
-             }   
-            }
+    string solv(string str) {
+        vector<string> words;
+        stringstream ss(str);
+        string word;
+        while (ss >> word) {
+            words.push_back(word);
         }
+        
+        set<string> uniqueWords;
+        for (const auto& w : words) {
+            uniqueWords.insert(w);
+        }
+        
+        string result;
+        for (const auto& w : uniqueWords) {
+            result += w + " ";
+        }
+        
+        if (!result.empty()) {
+            result.pop_back();  // Remove trailing space
+        }
+        
+        return result;
     }
 };
 int main(){
