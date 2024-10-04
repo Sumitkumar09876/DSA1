@@ -1,12 +1,12 @@
-#include<bits/stdc++.h>
+#include<iostream>
 #include<vector>
 using namespace std;
-class Node{
+struct Node{
     public:
     int data;
     Node* next;
     public:
-    Node(int data1,Node* next1){
+    Node(int data1,Node*next1){
         data=data1;
         next=next1;
     }
@@ -15,10 +15,10 @@ class Node{
         next=nullptr;
     }
 };
-Node*ATL(vector<int>arr){
+Node* ATL(vector<int>&arr){
     Node*head=new Node(arr[0]);
     Node*mover=head;
-    for(int i=0;i<arr.size();i++){
+    for(int i=1;i<arr.size();i++ ){
         Node*temp=new Node(arr[i]);
         mover->next=temp;
         mover=temp;
@@ -26,8 +26,9 @@ Node*ATL(vector<int>arr){
     return head;
 }
 int main(){
-    vector<int>arr={13,23,3};
+    vector<int>arr={41,2,3,4};
     Node*head=ATL(arr);
+    cout<<head->data<<endl;
     Node*temp=head;
     while(temp){
         cout<<temp->data<<" ";
