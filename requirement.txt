@@ -1,0 +1,17 @@
+
+
+
+
+sqlalchemy
+sqlalchemy.orm
+datetime
+networkx
+matplotlib
+fastapi.middleware
+uvicorn
+
+pydantic
+
+face_recognition
+requests
+numpy
