@@ -22,3 +22,24 @@ Insert Into Employ(EmpID)Values
 (3);
 
 Select * from books;
+
+
+use mydata;
+
+Create TABLE student(
+    id INT PRIMARY KEY,
+    name Varchar(50),
+    age INT NOT NULL
+);
+
+Insert into student values(1,'Sumit',21),
+(2,'Kumar',21);
+
+Select * from student;
+show tables;
+show databases;
+
+drop table employ;
+show tables;
+
+

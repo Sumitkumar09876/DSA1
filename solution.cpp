@@ -1,31 +1,29 @@
-#include<bits/stdc++.h>
+/*Count frequency of each element in the array
+Given an array, we have found the number of occurrence of each element in the array
+Input arr[]={10,5,10,15,10,5}
+Ouput 10 3
+5 2
+15 1
+*/
+#include<iostream>
+#include<vector>
+#include<unordered_map>
 using namespace std;
-
-class Solution {
-public:
-    int solv(vector<int>& arr, int k) {
-        int sum = 0, maxSum = INT_MIN;
-        int n = arr.size();
-        
-        // Calculate sum of first window
-        for (int i = 0; i < k; i++) {
-            sum += arr[i];
+class solution{
+    public:
+    void solv(int arr[],int n){
+        unordered_map<int,int>store;
+        for(int i=0;i<n;i++){
+            store[arr[i]]++;
         }
-        maxSum = sum;
-        
-        // Slide the window
-        for (int i = k; i < n; i++) {
-            sum = sum - arr[i-k] + arr[i];
-            maxSum = max(maxSum, sum);
+        for(auto& it:store){
+            cout<<it.first<<" "<<it.second<<endl;
         }
-        
-        return maxSum;
     }
 };
-
-int main() {
-    vector<int> arr = {1, 4, 2, 10, 23, 3, 1, 0, 20};
-    Solution sl;
-    cout << sl.solv(arr, 4);
-    return 0;
+int main(){
+    int arr[]={10,5,10,15,10,5};
+    int size=sizeof(arr)/sizeof(arr[0]);
+    solution sl;
+    sl.solv(arr,size);
 }
