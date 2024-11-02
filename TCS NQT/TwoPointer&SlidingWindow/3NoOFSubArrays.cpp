@@ -31,4 +31,5 @@ int main(){
     vector<int>arr={2, 4, 3, 7, 5};
     Solution sl;
     cout<<sl.solv(arr,10);
+    
 }

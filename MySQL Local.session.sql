@@ -32,7 +32,8 @@ Create TABLE student(
     age INT NOT NULL
 );
 
-Insert into student values(1,'Sumit',21),
+Insert into student values
+(1,'Sumit',21),
 (2,'Kumar',21);
 
 Select * from student;
@@ -41,5 +42,3 @@ show databases;
 
 drop table employ;
 show tables;
-
-
