@@ -14,7 +14,7 @@ class Solution{
     }
 };
 int main(){
-    int arr[]={1,2,3,4,5};
+    int arr[]={3,4,5,1,2};
     int n=sizeof(arr)/sizeof(arr[0]);
     Solution sl;
     if(sl.solv(arr,n)){

@@ -1,306 +1,183 @@
-import streamlit as st
-import pandas as pd
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, LargeBinary, Float, Boolean
-from sqlalchemy.orm import declarative_base, sessionmaker
-from datetime import datetime, timedelta
-import networkx as nx
-import matplotlib.pyplot as plt
-from fastapi import FastAPI, File, UploadFile
-from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
-from pydantic import BaseModel
-import face_recognition
-import io
-import base64
-import requests
-import numpy as np
-import os
-import threading
-import time
+import pygame
+import random
 
-# Database setup
-Base = declarative_base()
-db_path = 'security_system.db'
-engine = create_engine(f'sqlite:///{db_path}')
-Session = sessionmaker(bind=engine)
+# Initialize Pygame
+pygame.init()
 
-class Detection(Base):
-    _tablename_ = 'detections'
-    id = Column(Integer, primary_key=True)
-    camera_id = Column(String(50), nullable=False)
-    timestamp = Column(DateTime, nullable=False)
-    person_name = Column(String(100), nullable=False)
-    top = Column(Integer, nullable=False)
-    right = Column(Integer, nullable=False)
-    bottom = Column(Integer, nullable=False)
-    left = Column(Integer, nullable=False)
-    latitude = Column(Float, nullable=True)
-    longitude = Column(Float, nullable=True)
+# Constants
+WIDTH, HEIGHT = 300, 600
+BLOCK_SIZE = 30
+GRID_WIDTH = WIDTH // BLOCK_SIZE
+GRID_HEIGHT = HEIGHT // BLOCK_SIZE
+FPS = 5
 
-class KnownFace(Base):
-    _tablename_ = 'known_faces'
-    id = Column(Integer, primary_key=True)
-    name = Column(String(100), nullable=False)
-    encoding = Column(LargeBinary, nullable=False)
+# Colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
 
-class Camera(Base):
-    _tablename_ = 'cameras'
-    id = Column(String(50), primary_key=True)
-    latitude = Column(Float, nullable=False)
-    longitude = Column(Float, nullable=False)
+# Screen setup
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Tetris")
+clock = pygame.time.Clock()
 
-class ConnectedCamera(Base):
-    _tablename_ = 'connected_cameras'
-    id = Column(String(50), primary_key=True)
-    last_seen = Column(DateTime, nullable=False)
-    is_connected = Column(Boolean, default=True)
+# Tetromino shapes
+shapes = [
+    [[1, 1, 1, 1]],
+    [[1, 1, 1], [0, 0, 1]],
+    [[1, 1, 1], [1, 0, 0]],
+    [[1, 1], [1, 1]],
+    [[0, 1, 1], [1, 1, 0]],
+    [[1, 1, 1], [0, 1, 0]],
+    [[1, 1, 0], [0, 1, 1]],
+]
 
-# Create tables
-if not os.path.exists(db_path):
-    Base.metadata.create_all(engine)
-    print(f"Database created at {db_path}")
-else:
-    print(f"Database already exists at {db_path}")
+shape_colors = [
+    (0, 255, 255),
+    (0, 0, 255),
+    (255, 165, 0),
+    (255, 255, 0),
+    (0, 255, 0),
+    (128, 0, 128),
+    (255, 0, 0),
+]
 
-# FastAPI setup
-app = FastAPI()
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Game board
+grid = [[0 for _ in range(GRID_WIDTH)] for _ in range(GRID_HEIGHT)]
 
-class DetectionData(BaseModel):
-    camera_id: str
-    timestamp: str
-    person_name: str
-    bounding_box: dict
-    latitude: float
-    longitude: float
+class Piece:
+    def __init__(self, x, y, shape):
+        self.x = x
+        self.y = y
+        self.shape = shape
+        self.color = shape_colors[shapes.index(shape)]
+        self.rotation = 0
 
-@app.post("/add_detection")
-async def add_detection(data: DetectionData):
-    session = Session()
-    try:
-        new_detection = Detection(
-            camera_id=data.camera_id,
-            timestamp=datetime.fromisoformat(data.timestamp),
-            person_name=data.person_name,
-            top=data.bounding_box['top'],
-            right=data.bounding_box['right'],
-            bottom=data.bounding_box['bottom'],
-            left=data.bounding_box['left'],
-            latitude=data.latitude,
-            longitude=data.longitude
-        )
-        session.add(new_detection)
-        
-        # Update connected camera status
-        connected_camera = session.query(ConnectedCamera).filter_by(id=data.camera_id).first()
-        if connected_camera:
-            connected_camera.last_seen = datetime.now()
-            connected_camera.is_connected = True
+    def rotate(self):
+        original_x, original_y = self.x, self.y
+        original_rotation = self.rotation
+        self.rotation = (self.rotation + 1) % len(self.shape)
+        rotated_shape = self.get_rotated_shape()
+
+        offsets = [(0, 0), (1, 0), (-1, 0), (0, -1), (0, 1)]  # Wall kick offsets
+        for dx, dy in offsets:
+            self.x = original_x + dx
+            self.y = original_y + dy
+            if not self.check_collision(rotated_shape):
+                self.shape = rotated_shape
+                return
+
+        self.x = original_x  # Revert position
+        self.y = original_y
+        self.rotation = original_rotation
+
+    def get_rotated_shape(self):
+        return [
+            [self.shape[y][x] for y in range(len(self.shape))]
+            for x in range(len(self.shape[0]) - 1, -1, -1)
+        ]
+
+    def check_collision(self, shape, x_offset=0, y_offset=0):
+        for y, row in enumerate(shape):
+            for x, cell in enumerate(row):
+                if cell:
+                    new_x = self.x + x + x_offset
+                    new_y = self.y + y + y_offset
+
+                    if new_x < 0 or new_x >= GRID_WIDTH or new_y >= GRID_HEIGHT:
+                        return True
+                    if new_y >= 0 and grid[new_y][new_x]:
+                        return True
+        return False
+
+def draw_grid():
+    for y in range(GRID_HEIGHT):
+        for x in range(GRID_WIDTH):
+            if grid[y][x]:
+                color = shape_colors[grid[y][x] - 1]
+                pygame.draw.rect(screen, color, (x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE))
+                pygame.draw.rect(screen, BLACK, (x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE), 1)
+
+def draw_piece(piece):
+    for y, row in enumerate(piece.shape):
+        for x, cell in enumerate(row):
+            if cell:
+                pygame.draw.rect(screen, piece.color,
+                                 ((piece.x + x) * BLOCK_SIZE, (piece.y + y) * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE))
+                pygame.draw.rect(screen, BLACK,
+                                 ((piece.x + x) * BLOCK_SIZE, (piece.y + y) * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE), 1)
+
+def clear_lines():
+    lines_cleared = 0
+    y = GRID_HEIGHT - 1
+    while y >= 0:
+        if all(grid[y]):
+            lines_cleared += 1
+            del grid[y]
+            grid.insert(0, [0 for _ in range(GRID_WIDTH)])
         else:
-            new_connected_camera = ConnectedCamera(id=data.camera_id, last_seen=datetime.now())
-            session.add(new_connected_camera)
-        
-        session.commit()
-        print(f"Detection added: {data.person_name} at {data.timestamp}")  # Debug print
-        return {"message": "Detection added successfully"}
-    except Exception as e:
-        session.rollback()
-        print(f"Error adding detection: {e}")  # Debug print
-        return {"message": f"Error adding detection: {str(e)}"}
-    finally:
-        session.close()
+            y -= 1
+    return lines_cleared
 
-@app.post("/add_known_face")
-async def add_known_face(name: str, file: UploadFile = File(...)):
-    contents = await file.read()
-    image = face_recognition.load_image_file(io.BytesIO(contents))
-    encoding = face_recognition.face_encodings(image)[0]
-    
-    session = Session()
-    try:
-        new_face = KnownFace(name=name, encoding=encoding.tobytes())
-        session.add(new_face)
-        session.commit()
-        print(f"Known face added: {name}")  # Debug print
-        return {"message": "Known face added successfully"}
-    except Exception as e:
-        session.rollback()
-        print(f"Error adding known face: {e}")  # Debug print
-        return {"message": f"Error adding known face: {str(e)}"}
-    finally:
-        session.close()
-
-@app.get("/get_known_faces")
-async def get_known_faces():
-    session = Session()
-    try:
-        known_faces = session.query(KnownFace).all()
-        result = [{"name": face.name, "encoding": base64.b64encode(face.encoding).decode()} for face in known_faces]
-        print(f"Retrieved {len(result)} known faces")  # Debug print
-        return result
-    except Exception as e:
-        print(f"Error retrieving known faces: {e}")  # Debug print
-        return {"message": f"Error retrieving known faces: {str(e)}"}
-    finally:
-        session.close()
-
-@app.post("/add_camera")
-async def add_camera(camera_id: str, latitude: float, longitude: float):
-    session = Session()
-    try:
-        new_camera = Camera(id=camera_id, latitude=latitude, longitude=longitude)
-        session.add(new_camera)
-        session.commit()
-        print(f"Camera added: {camera_id}")  # Debug print
-        return {"message": "Camera added successfully"}
-    except Exception as e:
-        session.rollback()
-        print(f"Error adding camera: {e}")  # Debug print
-        return {"message": f"Error adding camera: {str(e)}"}
-    finally:
-        session.close()
-
-def get_detections(person_name, start_time, end_time):
-    session = Session()
-    try:
-        detections = session.query(Detection).filter(
-            Detection.person_name == person_name,
-            Detection.timestamp.between(start_time, end_time)
-        ).order_by(Detection.timestamp).all()
-        print(f"Queried detections: {len(detections)}")  # Debug print
-        for detection in detections:
-            print(f"Detection: {detection.person_name} at {detection.timestamp}")  # Debug print
-        return detections
-    except Exception as e:
-        print(f"Error querying detections: {e}")  # Debug print
-        return []
-    finally:
-        session.close()
-
-def reconstruct_path(detections):
-    G = nx.Graph()
-    for detection in detections:
-        G.add_node(detection.camera_id, pos=(detection.longitude, detection.latitude))
-
-    for i in range(len(detections) - 1):
-        G.add_edge(detections[i].camera_id, detections[i+1].camera_id)
-
-    path = [d.camera_id for d in detections]
-    return path, G
-
-def visualize_path(G, path):
-    pos = nx.get_node_attributes(G, 'pos')
-    plt.figure(figsize=(12, 10))
-    nx.draw(G, pos, with_labels=True, node_color='lightblue', node_size=500, font_size=8, font_weight='bold')
-    
-    path_edges = list(zip(path, path[1:]))
-    nx.draw_networkx_edges(G, pos, edgelist=path_edges, edge_color='r', width=2)
-
-    labels = {node: f"{node}\n{i+1}" for i, node in enumerate(path)}
-    nx.draw_networkx_labels(G, pos, labels, font_size=8)
-
-    plt.title("Person's Path Through Camera Network")
-    plt.axis('off')
-    plt.tight_layout()
-
-def update_connected_cameras():
-    while True:
-        session = Session()
-        try:
-            threshold_time = datetime.now() - timedelta(minutes=1)
-            cameras = session.query(ConnectedCamera).all()
-            for camera in cameras:
-                if camera.last_seen < threshold_time:
-                    camera.is_connected = False
-            session.commit()
-            print("Updated connected cameras status")  # Debug print
-        except Exception as e:
-            session.rollback()
-            print(f"Error updating connected cameras: {e}")  # Debug print
-        finally:
-            session.close()
-        time.sleep(60)  # Check every minute
-
-# Streamlit app
 def main():
-    st.title('Enhanced Security System Dashboard')
+    current_piece = Piece(GRID_WIDTH // 2, 0, random.choice(shapes))
+    fall_time = 0
+    fall_speed = 0.5
+    score = 0
+    running = True
 
-    # Sidebar for navigation
-    page = st.sidebar.selectbox("Choose a page", ["Add Known Face", "Add Camera", "Query Detections", "Connected Cameras"])
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    if not current_piece.check_collision(current_piece.shape, x_offset=-1):
+                        current_piece.x -= 1
+                if event.key == pygame.K_RIGHT:
+                    if not current_piece.check_collision(current_piece.shape, x_offset=1):
+                        current_piece.x += 1
+                if event.key == pygame.K_DOWN:
+                    fall_speed = 0.1
+                if event.key == pygame.K_UP:
+                    current_piece.rotate()
 
-    if page == "Add Known Face":
-        st.header('Add Known Face')
-        name = st.text_input('Person Name')
-        uploaded_file = st.file_uploader("Choose an image...", type="jpg")
-        if uploaded_file is not None and name:
-            if st.button('Add Face'):
-                files = {'file': uploaded_file}
-                response = requests.post(f"http://localhost:8000/add_known_face?name={name}", files=files)
-                st.write(response.json())
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_DOWN:
+                fall_speed = 0.5
 
-        st.subheader('Current Known Faces')
-        known_faces = requests.get("http://localhost:8000/get_known_faces").json()
-        for face in known_faces:
-            st.write(face['name'])
-
-    elif page == "Add Camera":
-        st.header('Add Camera')
-        camera_id = st.text_input('Camera ID')
-        latitude = st.number_input('Latitude', format="%.6f")
-        longitude = st.number_input('Longitude', format="%.6f")
-        if st.button('Add Camera'):
-            response = requests.post(f"http://localhost:8000/add_camera?camera_id={camera_id}&latitude={latitude}&longitude={longitude}")
-            st.write(response.json())
-
-    elif page == "Query Detections":
-        st.header('Query Detections')
-        query_name = st.text_input('Person Name to Query')
-        start_date = st.date_input('Start Date')
-        end_date = st.date_input('End Date')
-        if st.button('Query'):
-            print(f"Querying for {query_name} between {start_date} and {end_date}")  # Debug print
-            detections = get_detections(query_name, start_date, end_date)
-            print(f"Received {len(detections)} detections")  # Debug print
-            if detections:
-                df = pd.DataFrame([(d.camera_id, d.timestamp, d.person_name, d.latitude, d.longitude) for d in detections],
-                                  columns=['Camera ID', 'Timestamp', 'Person Name', 'Latitude', 'Longitude'])
-                st.write(df)
-                
-                path, G = reconstruct_path(detections)
-                st.write("Reconstructed Path:", path)
-                st.write(f"First seen at: {detections[0].camera_id} at {detections[0].timestamp}")
-                st.write(f"Last seen at: {detections[-1].camera_id} at {detections[-1].timestamp}")
-                
-                visualize_path(G, path)
-                st.pyplot()
+        fall_time += clock.get_rawtime() / 1000
+        if fall_time > fall_speed:
+            fall_time = 0
+            if not current_piece.check_collision(current_piece.shape, y_offset=1):
+                current_piece.y += 1
             else:
-                st.write('No detections found.')
-                print("No detections found in the database")  # Debug print
+                # Place piece on grid
+                for y, row in enumerate(current_piece.shape):
+                    for x, cell in enumerate(row):
+                        if cell:
+                            grid[current_piece.y + y][current_piece.x + x] = shapes.index(current_piece.shape) + 1
 
-    elif page == "Connected Cameras":
-        st.header('Connected Cameras')
-        session = Session()
-        connected_cameras = session.query(ConnectedCamera).filter_by(is_connected=True).all()
-        session.close()
-        
-        if connected_cameras:
-            for camera in connected_cameras:
-                st.success(f"{camera.id} is connected with the Server (Last seen: {camera.last_seen})")
-        else:
-            st.info("No cameras currently connected.")
+                lines = clear_lines()
+                score += lines * 10
 
-if __name__ == "_main_":
-    # Start the camera connection update thread
-    threading.Thread(target=update_connected_cameras, daemon=True).start()
-    
-    # Run FastAPI in a separate thread
-    threading.Thread(target=uvicorn.run, args=(app,), kwargs={"host": "0.0.0.0", "port": 8000}, daemon=True).start()
-    
-    # Run Streamlit
+                # Check for game over
+                new_piece = Piece(GRID_WIDTH // 2, 0, random.choice(shapes))
+                if new_piece.check_collision(new_piece.shape):
+                    print("Game Over! Score:", score)
+                    running = False
+                else:
+                    current_piece = new_piece
+
+        screen.fill(BLACK)
+        draw_grid()
+        draw_piece(current_piece)
+        pygame.display.flip()
+        clock.tick(FPS)
+
+    pygame.quit()
+
+if __name__ == "__main__":
     main()

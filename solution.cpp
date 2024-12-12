@@ -1,29 +1,57 @@
-/*Count frequency of each element in the array
-Given an array, we have found the number of occurrence of each element in the array
-Input arr[]={10,5,10,15,10,5}
-Ouput 10 3
-5 2
-15 1
-*/
-#include<iostream>
-#include<vector>
-#include<unordered_map>
+#include <bits/stdc++.h>
 using namespace std;
-class solution{
-    public:
-    void solv(int arr[],int n){
-        unordered_map<int,int>store;
-        for(int i=0;i<n;i++){
-            store[arr[i]]++;
-        }
-        for(auto& it:store){
-            cout<<it.first<<" "<<it.second<<endl;
+
+int dir[4][2] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+bool isValid(int x, int y, int n, const vector<vector<char>>& grid) {
+    return x >= 0 && x < n && y >= 0 && y < n && grid[x][y] != 'M';
+}
+// @Mahato
+int fMW(int n, const vector<vector<char>>& grid, pair<int, int> start, pair<int, int> end) {
+    vector<vector<int>> Mahato(n, vector<int>(n, INT_MAX)); 
+    queue<pair<int, int>> q;
+
+
+    q.push(start);
+    Mahato[start.first][start.second] = 0;
+
+    while (!q.empty()) {
+        auto [x, y] = q.front();
+        q.pop();
+
+        for (int d = 0; d < 4; d++) {
+            int nx = x + dir[d][0];
+            int ny = y + dir[d][1];
+
+            if (isValid(nx, ny, n, grid)) {
+                int cost = (grid[x][y] == 'T' && grid[nx][ny] == 'T') ? 0 : 1; 
+                if (Mahato[x][y] + cost < Mahato[nx][ny]) {
+                    Mahato[nx][ny] = Mahato[x][y] + cost;
+                    q.push({nx, ny});
+                }
+            }
         }
     }
-};
-int main(){
-    int arr[]={10,5,10,15,10,5};
-    int size=sizeof(arr)/sizeof(arr[0]);
-    solution sl;
-    sl.solv(arr,size);
+
+    return Mahato[end.first][end.second];
+}
+
+int main() {
+    int n;
+    cin >> n;
+    vector<vector<char>> grid(n, vector<char>(n));
+    pair<int, int> start, end;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cin >> grid[i][j];
+            if (grid[i][j] == 'S') start = {i, j};
+            if (grid[i][j] == 'E') end = {i, j};
+        }
+    }
+
+    int result = fMW(n, grid, start, end);
+    cout << result << endl;
+
+    return 0;
 }
