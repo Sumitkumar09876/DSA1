@@ -91,7 +91,10 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "valarray": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "generator": "cpp",
+        "print": "cpp",
+        "text_encoding": "cpp"
     },
     "livePreview.defaultPreviewPath": "/#Rough/sam.html",
     "CodeGPT.apiKey": "Nvidia",
