@@ -1,27 +1,36 @@
-#include<iostream>
-#include<string>
-#include<sstream>
-#include<cctype>
-#include<algorithm>
-
+#include <iostream>
+#include <vector>
 using namespace std;
-class Solution{
-    public:
-    int solv(string str){
-        istringstream iss(str);
-        string word;
-        int wordcount=0;
-        while (iss>>word)
-        {
-            if(any_of(word.begin(),word.end(),::isalnum)){
-                wordcount++;
+
+class Solution {
+public:
+    int solv(vector<int>arr, int size, int k) {
+        int i = 0, j = 0;
+        int sum = 0;
+        int maxLen = 0;
+        
+        while (j < size) {
+            sum += arr[j];
+            
+            while (i <= j && sum > k) {
+                sum -= arr[i];
+                i++;
             }
+            
+            if (sum == k) {
+                maxLen = max(maxLen, j - i + 1);
+            }
+            
+            j++;
         }
-        return (wordcount+1)/2;
+        return maxLen;
     }
 };
-int main(){
-    string str="How long do you have to sit dear ?";
+
+int main() {
+    vector<int>arr = {2,3,5,1,9};
+    int size = arr.size();
     Solution sl;
-    cout<<sl.solv(str);
+    cout << sl.solv(arr,size,10);
+    return 0;
 }

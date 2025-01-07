@@ -1,47 +1,21 @@
 #include<iostream>
 #include<vector>
+#include<set>
 using namespace std;
 class Solution{
     public:
     vector<int>solv(vector<int>arr1,vector<int>arr2,int size1,int size2){
-        int min1=arr1[0];
-        int max1=arr1[0];
-        for(int i=0;i<size1;i++){
-            if(min1>arr1[i]){
-                min1=arr1[i];
-            }
-            if(max1<arr1[i]){
-                max1=arr1[i];
-            }
-        }
-        int min2=arr2[0];
-        int max2=arr2[0];
+        set<int>store;
         for(int i=0;i<size2;i++){
-            if(min2>arr2[i]){
-                min2=arr2[i];
-            }
-            if(max2<arr2[i]){
-                max2=arr2[i];
-            }
+            arr1.push_back(arr2[i]);
         }
-        int min=0;
-        int max=0;
-        if(min1<=min2){
-            min=min1;
-        }else{
-            min=min2;
+        int size=arr1.size();
+        for(int i=0;i<size;i++){
+            store.insert(arr1[i]);
         }
-        if(max1>=max2){
-            max=max1;
-        }else{
-            max=max2;
-        }
-        vector<int>store;
-        for(int i=min;i<=max;i++){
-            store.push_back(i);
-
-        }
-        return store;
+        vector<int>hold(store.begin(),store.end());
+        
+        return hold;
     }
 };
 int main(){

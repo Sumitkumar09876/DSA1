@@ -4,22 +4,22 @@ using namespace std;
 class Solution{
     public:
     int solv(vector<int>arr,int size,int k){
-        int i=0,j=i+1;
-        int sum=arr[i]+arr[j];
-        int cnt=0;
+        int i=0,j=0;
+        int sum=0;
+        int maxlen=0;
         while(j<size){
-            sum=arr[i]+arr[j];
-            if(sum<k){
-                j++;
-            }
-            else if(sum>k){
+            
+            sum=sum+arr[j];
+            while(i<=j && sum>k){
+                sum=sum-arr[i];
                 i++;
             }
-            else if(sum==k){
-                
+            if(sum==k){
+                maxlen=max(maxlen,j-i+1);
             }
+            j++;
         }
-        return cnt;
+        return maxlen;
     }
 };
 int main(){
