@@ -1,25 +1,21 @@
-def solve(n, nums, k, queries):
-    if k == 1:  # Special case optimization for k=1
-        dp = nums.copy()
-        for i in range(1, n):
-            dp[i] = max(dp[i], nums[i] + dp[i-1])
-        return [dp[i-1] for i in queries]
-    
-    # For general case
-    dp = nums.copy()
-    max_window = float('-inf')
-    
-    for i in range(1, n):
-        if i > k:
-            max_window = max(dp[i-k-1:i])
-            dp[i] = max(dp[i], nums[i] + max_window)
-        else:
-            dp[i] = max(dp[i], nums[i] + max(dp[:i], default=0))
-    
-    return [dp[i-1] for i in queries]
-n = 5
-nums = [2,-3,5,-4,3]
-k=1
-q=2
-queries=[2,5]
-print(solve(n,nums,k,queries))
+def main():
+    inputs = input().split()
+    currentPopulation = int(inputs[0])
+    birthRate = float(inputs[1])
+    deathRate = float(inputs[2])
+    days = int(inputs[3])
+
+    # Iterate for the given number of days to calculate the population change
+    for _ in range(days):
+        # Calculate the number of births in a day
+        birth_increase = currentPopulation * birthRate
+        # Calculate the number of deaths in a day
+        death_decrease = currentPopulation * deathRate
+        # Update the current population by adding births and subtracting deaths
+        currentPopulation = currentPopulation + birth_increase - death_decrease
+
+    # Round the final population to the nearest integer as per problem description
+    print(round(currentPopulation))
+
+if __name__ == "__main__":
+    main()
