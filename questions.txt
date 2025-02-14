@@ -1,0 +1,15 @@
+1. 1_FindSmallestElementInAnArray
+2. 2_FindSecSamllAndSecLarge
+3. 3_ReverseTheArray
+4. 4_OccurenceOfEachElement
+5. 5_RearrangTheArray
+6. 6_RotateAnArrayByKElement
+7. 7_AddingElementInArray
+8. 8_RemovesDuplicatesFromUnsortedArray
+9. 9_FindAllRepeatingElementsInAnArray
+10. 10_FindAllRepeatingElementsInArray
+11. 11_MaximumProductSubarrayInAnArray
+12. 12_FindAllSymmetricPairsInTheArrayOfPairs
+13. 13_SortElementsOfArrayByFrequency
+14. 14_FindEquilibriumIndexInAnArray
+15. 15_SearchAElementInAnArray
