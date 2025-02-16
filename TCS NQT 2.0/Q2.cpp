@@ -9,12 +9,34 @@ Second largest = 5
 using namespace std;
 class Solution{
     public:
-    int solv(int arr[],int size){
+    void solv(int arr[],int size){
+        int smallest=arr[0];
+        int largest=arr[0];
         for(int i=0;i<size;i++){
-            int store=arr[i];
-            for(int j=i;j<size-i;j++){
-                
+            if(smallest>arr[i]){
+                smallest=arr[i];
+            }
+            if(largest<arr[i]){
+                largest=arr[i];
             }
         }
+        int secsmallest=INT_MAX;
+        int seclargest=INT_MIN;
+        for(int i=0;i<size;i++){
+            if(secsmallest>arr[i] && arr[i]!=smallest){
+                secsmallest=arr[i];
+            }
+            if(seclargest<arr[i] && arr[i]!=largest){
+                seclargest=arr[i];
+            }
+        }
+        cout<<"Second Smallest:"<<secsmallest<<endl;
+        cout<<"Second Largest:"<<seclargest;
     }
+};
+int main(){
+    int arr[]={1,2,3,7,7,5};
+    int size=sizeof(arr)/sizeof(arr[0]);
+    Solution sl;
+    sl.solv(arr,size);
 }
