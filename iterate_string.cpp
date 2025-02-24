@@ -1,30 +1,12 @@
-#include<iostream>
-#include<vector>
+#include <iostream>
 using namespace std;
-class Solution{
-    public:
-    int solv(vector<int>arr,int size,int k){
-        int i=0,j=i+1;
-        int sum=arr[i]+arr[j];
-        int cnt=0;
-        while(j<size){
-            sum=arr[i]+arr[j];
-            if(sum<k){
-                j++;
-            }
-            else if(sum>k){
-                i++;
-            }
-            else if(sum==k){
-                
-            }
-        }
-        return cnt;
-    }
-};
-int main(){
-    vector<int>arr={2,3,5,1,9};
-    int size=arr.size();
-    Solution sl;
-    cout<<sl.solv(arr,size,10);
+
+long long simpleFactorial(int n) {
+    if (n < 0) return -1;  // Error case
+    if (n <= 1) return 1;  // Base case
+    return n * simpleFactorial(n - 1);
+}
+
+int main() {
+    cout << "1. Simple Recursion: " << simpleFactorial(10) << endl;
 }
