@@ -1,73 +1,59 @@
-import pygame
-import sys
+import math
 
-# Initialize Pygame
-pygame.init()
+def gcd(a, b):
+    while b:
+        a %= b
+        a, b = b, a
+    return a
 
-# Screen dimensions
-WIDTH, HEIGHT = 800, 800
-ROWS, COLS = 8, 8
-SQUARE_SIZE = WIDTH // COLS
+def calculateHours(arr, start, days):
+    total = 0
+    g = arr[start]
+    for i in range(start, start + days):
+        g = gcd(g, arr[i])
+        total += arr[i]
+    return total // g
 
-# Colors
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-GREY = (128, 128, 128)
+def solve(N, M, K, Arr, D):
+    result = []
+    for q in range(M):
+        start = D[q] - 1
+        maxDays = N - start
+        if maxDays <= 0 or Arr[start] < K:
+            maxHours = calculateHours(Arr, start, maxDays)
+            if maxHours < K:
+                result.append("-1")
+                continue
+        else:
+            pass
 
-# Load images
-def load_images():
-    pieces = ['bB', 'bK', 'bN', 'bP', 'bQ', 'bR', 'wB', 'wK', 'wN', 'wP', 'wQ', 'wR']
-    images = {}
-    for piece in pieces:
-        images[piece] = pygame.transform.scale(pygame.image.load(f'images/{piece}.png'), (SQUARE_SIZE, SQUARE_SIZE))
-    return images
+        left = 1
+        right = maxDays
+        ans = maxDays
+        while left <= right:
+            mid = left + (right - left) // 2
+            hours = calculateHours(Arr, start, mid)
+            if hours >= K:
+                ans = mid
+                right = mid - 1
+            else:
+                left = mid + 1
 
-IMAGES = load_images()
+        hours = calculateHours(Arr, start, ans)
+        if hours >= K:
+            result.append(str(ans))
+        else:
+            result.append("-1")
+    return result
 
-# Initialize screen
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Chess')
+T = int(input())
+for _ in range(T):
+    custom_input_1 = list(map(str, input().split()))
+    N = int(custom_input_1[0])
+    M = int(custom_input_1[1])
+    K = int(custom_input_1[2])
+    Arr = list(map(int, input().split()))
+    D = list(map(int, input().split()))
 
-def draw_board(screen):
-    colors = [pygame.Color("white"), pygame.Color("gray")]
-    for row in range(ROWS):
-        for col in range(COLS):
-            color = colors[((row + col) % 2)]
-            pygame.draw.rect(screen, color, pygame.Rect(col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
-
-def draw_pieces(screen, board):
-    for row in range(ROWS):
-        for col in range(COLS):
-            piece = board[row][col]
-            if piece != "--":
-                screen.blit(IMAGES[piece], pygame.Rect(col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
-
-def main():
-    clock = pygame.time.Clock()
-    board = [
-        ["bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"],
-        ["bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"],
-        ["--", "--", "--", "--", "--", "--", "--", "--"],
-        ["--", "--", "--", "--", "--", "--", "--", "--"],
-        ["--", "--", "--", "--", "--", "--", "--", "--"],
-        ["--", "--", "--", "--", "--", "--", "--", "--"],
-        ["wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"],
-        ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"]
-    ]
-    
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-        
-        draw_board(screen)
-        draw_pieces(screen, board)
-        pygame.display.flip()
-        clock.tick(30)
-
-    pygame.quit()
-    sys.exit()
-
-if __name__ == "__main__":
-    main()
+    out_ = solve(N, M, K, Arr, D)
+    print(' '.join(map(str, out_)))
